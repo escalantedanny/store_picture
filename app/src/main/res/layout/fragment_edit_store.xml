@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?attr/textAppearanceCaption"
                 android:textColor="@color/color_link"
-                android:maxLength="@integer/counter_max_phone"
+                android:maxLength="@integer/counter_max_website"
                 android:maxLines="@integer/max_line_website"
                 android:minLines="@integer/max_line_website"
                 android:inputType="textMultiLine"/>

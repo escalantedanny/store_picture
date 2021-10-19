@@ -10,7 +10,7 @@ interface StoreDao {
     fun getAllStores() : MutableList<Store>
 
     @Insert
-    fun addStore(storeEntity: Store)
+    fun addStore(storeEntity: Store): Long
 
     @Update
     fun updateStore(storeEntity: Store)

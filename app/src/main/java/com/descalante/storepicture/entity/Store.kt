@@ -9,6 +9,7 @@ data class Store(@PrimaryKey(autoGenerate = true) var id: Long = 0,
                 var phone:String = "",
                 var website:String = "",
                 var isFavorite:Boolean = false,
+                var photoUrl:String,
                 var date:String = "",
                 var createBy:String = ""
         ){

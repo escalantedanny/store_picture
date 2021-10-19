@@ -12,4 +12,5 @@
     <string name="edit_store_title_add">Create Store</string>
     <string name="menu_save">Save</string>
     <string name="message_add_store">store added successfully</string>
+    <string name="arg_id">key_id</string>
 </resources>

@@ -11,6 +11,7 @@ import com.descalante.storepicture.entity.Store
 import com.descalante.storepicture.databinding.ActivityMainBinding
 import com.descalante.storepicture.interfaces.MainAux
 import com.descalante.storepicture.interfaces.OnClickListener
+import com.google.android.material.snackbar.Snackbar
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.text.SimpleDateFormat
@@ -19,8 +20,6 @@ import java.util.*
 class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
 
     private lateinit var mBinding : ActivityMainBinding
-    @SuppressLint("SimpleDateFormat")
-    val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
     private lateinit var mAdapter : StoreAdapter
     private lateinit var mGridLayout : GridLayoutManager
 
@@ -28,19 +27,6 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-
-        /*mBinding.btnSave.setOnClickListener{
-            val currentDate = sdf.format(Date())
-            var store = Store(name = mBinding.etName.text.toString().trim(), date = currentDate)
-
-            //insert database
-            Thread {
-                StoreApplication.database.storeDao().addStore(store)
-            }.start()
-
-            mAdapter.add(store)
-            mBinding.etName.text = null
-        }*/
 
         mBinding.fab.setOnClickListener { launchFragmentEdit() }
 
@@ -50,12 +36,17 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
     /**
      * OnClickListener
      */
-    override fun onClick(store: Store) {
-        TODO("Not yet implemented")
+    override fun onClick(storeId: Long) {
+        val arg = Bundle()
+        arg.putLong(getString(R.string.arg_id), storeId)
+        launchFragmentEdit(arg)
     }
 
-    fun launchFragmentEdit() {
-        var fragmentEdit = EditStoreFragment()
+    fun launchFragmentEdit(args: Bundle? = null) {
+        val fragmentEdit = EditStoreFragment()
+        if(args!=null){
+            fragmentEdit.arguments = args
+        }
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
 
@@ -110,6 +101,13 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
      */
     override fun hideFab(aux: Boolean) {
         if(aux) mBinding.fab.show() else mBinding.fab.hide()
+    }
 
+    override fun addStore(store: Store) {
+        mAdapter.add(store)
+    }
+
+    override fun updateStore(store: Store) {
+        mAdapter.update(store)
     }
 }

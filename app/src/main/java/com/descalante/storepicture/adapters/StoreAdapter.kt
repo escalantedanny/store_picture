@@ -5,7 +5,10 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.descalante.storepicture.R
 import com.descalante.storepicture.entity.Store
 import com.descalante.storepicture.databinding.ItemStoreBinding
@@ -19,7 +22,7 @@ class StoreAdapter(private var stores: MutableList<Store>, private var listener:
         val mBinding = ItemStoreBinding.bind(view)
         fun setListener(store:Store){
             with(mBinding.root){
-                setOnClickListener{ listener.onClick(store) }
+                setOnClickListener{ listener.onClick(store.id) }
                 setOnLongClickListener {
                     listener.onDeleteStore(store)
                     true
@@ -42,6 +45,10 @@ class StoreAdapter(private var stores: MutableList<Store>, private var listener:
             setListener(store)
             mBinding.tvName.text = store.name
             mBinding.cbFavorite.isChecked = store.isFavorite
+            Glide.with(mContext)
+                .load(store.photoUrl)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(mBinding.imgPhoto)
         }
     }
 
@@ -51,8 +58,10 @@ class StoreAdapter(private var stores: MutableList<Store>, private var listener:
 
     @SuppressLint("NotifyDataSetChanged")
     fun add(store: Store) {
-        stores.add(store)
-        notifyDataSetChanged() // avisamos a adaptador que refleje la pantalla para que se vea la tienda
+        if(!stores.contains(store)){
+            stores.add(store)
+            notifyItemInserted(stores.size-1) // avisamos a adaptador que refleje la pantalla para que se vea la tienda
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -75,6 +84,13 @@ class StoreAdapter(private var stores: MutableList<Store>, private var listener:
         if (index != -1){
             stores.removeAt(index)
             notifyItemRemoved(index)
+        }
+    }
+
+    fun findById(store: Store) {
+        val index = stores.indexOf(store)
+        if (index != -1){
+            stores.get(index)
         }
     }
 }
