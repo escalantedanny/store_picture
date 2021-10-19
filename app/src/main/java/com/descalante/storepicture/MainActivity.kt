@@ -3,6 +3,7 @@ package com.descalante.storepicture
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.annotation.UiThread
 import androidx.recyclerview.widget.GridLayoutManager
 import com.descalante.storepicture.adapters.StoreAdapter
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
 
-        mBinding.btnSave.setOnClickListener{
+        /*mBinding.btnSave.setOnClickListener{
             val currentDate = sdf.format(Date())
             var store = Store(name = mBinding.etName.text.toString().trim(), date = currentDate)
 
@@ -38,7 +39,9 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
             mAdapter.add(store)
             mBinding.etName.text = null
-        }
+        }*/
+
+        mBinding.fab.setOnClickListener { launchFragmentEdit() }
 
         setupRecyclerView()
     }
@@ -48,6 +51,17 @@ class MainActivity : AppCompatActivity(), OnClickListener {
      */
     override fun onClick(store: Store) {
         TODO("Not yet implemented")
+    }
+
+    fun launchFragmentEdit() {
+        var fragmentEdit = EditStoreFragment()
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+
+        fragmentTransaction.add(R.id.containerMain, fragmentEdit)
+        fragmentTransaction.commit()
+
+        mBinding.fab.hide()
     }
 
     override fun setupRecyclerView() {
