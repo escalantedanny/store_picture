@@ -9,13 +9,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.descalante.storepicture.adapters.StoreAdapter
 import com.descalante.storepicture.entity.Store
 import com.descalante.storepicture.databinding.ActivityMainBinding
+import com.descalante.storepicture.interfaces.MainAux
 import com.descalante.storepicture.interfaces.OnClickListener
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MainActivity : AppCompatActivity(), OnClickListener {
+class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
 
     private lateinit var mBinding : ActivityMainBinding
     @SuppressLint("SimpleDateFormat")
@@ -59,9 +60,10 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         val fragmentTransaction = fragmentManager.beginTransaction()
 
         fragmentTransaction.add(R.id.containerMain, fragmentEdit)
+        fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
 
-        mBinding.fab.hide()
+        hideFab()
     }
 
     override fun setupRecyclerView() {
@@ -101,5 +103,13 @@ class MainActivity : AppCompatActivity(), OnClickListener {
                 mAdapter.delete(store)
             }
         }
+    }
+
+    /**
+     * Interface MainAux
+     */
+    override fun hideFab(aux: Boolean) {
+        if(aux) mBinding.fab.show() else mBinding.fab.hide()
+
     }
 }

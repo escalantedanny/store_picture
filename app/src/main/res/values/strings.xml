@@ -9,4 +9,7 @@
     <string name="hint_phone">Cellphone</string>
     <string name="website_name">http://www.dominio.com</string>
     <string name="Url_picture">Url picture</string>
+    <string name="edit_store_title_add">Create Store</string>
+    <string name="menu_save">Save</string>
+    <string name="message_add_store">store added successfully</string>
 </resources>
