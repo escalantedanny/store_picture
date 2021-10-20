@@ -13,4 +13,11 @@
     <string name="menu_save">Save</string>
     <string name="message_add_store">store added successfully</string>
     <string name="arg_id">key_id</string>
+    <string name="message_update_store">update success</string>
+    <string name="edit_store_message_valid">please, fields empty</string>
+    <string name="edit_store_title_edit">update store</string>
+    <string name="dialog_delete_title">Do you want delete record?</string>
+    <string name="button_delete">Delete</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="dialog_options">What do you want?</string>
 </resources>

@@ -18,6 +18,8 @@ import com.descalante.storepicture.adapters.StoreAdapter
 import com.descalante.storepicture.databinding.FragmentEditStoreBinding
 import com.descalante.storepicture.entity.Store
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.text.SimpleDateFormat
@@ -28,6 +30,7 @@ class EditStoreFragment : Fragment() {
     private lateinit var mBinding: FragmentEditStoreBinding
     @SuppressLint("SimpleDateFormat")
     val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+    val currentDate = sdf.format(Date())
     private var mIsEditMode :Boolean = false
     private var mStore: Store? = null
 
@@ -53,14 +56,25 @@ class EditStoreFragment : Fragment() {
             mIsEditMode = true
             getStore(id)
         } else {
-            Toast.makeText(activity, id?.toString(), Toast.LENGTH_SHORT).show()
+            mIsEditMode = false
+            mStore = Store(name = "", phone = "", website = "", photoUrl = "", date = currentDate, createBy = "Danny.ezequiel@gmail.com")
         }
 
+        setupActionBar()
+
+        setupTextFields()
+
+    }
+
+    private fun setupActionBar() {
         mActivity = activity as? MainActivity
         mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        mActivity?.supportActionBar?.title = getString(R.string.edit_store_title_add)
+        mActivity?.supportActionBar?.title = if(mIsEditMode) getString(R.string.edit_store_title_edit) else getString(R.string.edit_store_title_add)
 
         setHasOptionsMenu(true)
+    }
+
+    private fun setupTextFields() {
 
         mBinding.etPhotoUrl.addTextChangedListener {
             Glide.with(this)
@@ -70,6 +84,10 @@ class EditStoreFragment : Fragment() {
                 .into(mBinding.imgPhoto)
         }
 
+        mBinding.etName.addTextChangedListener{ validateFields(mBinding.tilName) }
+        mBinding.etPhone.addTextChangedListener{ validateFields(mBinding.tilPhone) }
+        mBinding.etWebsite.addTextChangedListener{ validateFields(mBinding.tilWebsite) }
+        mBinding.etPhotoUrl.addTextChangedListener{ validateFields(mBinding.tilPhoto) }
     }
 
     private fun getStore(id: Long) {
@@ -106,26 +124,39 @@ class EditStoreFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val currentDate = sdf.format(Date())
         return when(item.itemId){
             android.R.id.home -> {
                 mActivity?.onBackPressed()
                 true
             } R.id.action_save -> {
-                var store = Store(
-                    name = mBinding.etName.text.toString().trim(),
-                    phone = mBinding.etPhone.text.toString().trim(),
-                    website = mBinding.etWebsite.text.toString().trim(),
-                    date = currentDate,
-                    photoUrl = mBinding.etPhotoUrl.text.toString().trim(),
-                    createBy = "danny.ezequiel@gmail.com")
-                doAsync {
-                    store.id = StoreApplication.database.storeDao().addStore(store)
-                    uiThread {
-                        mActivity?.addStore(store)
-                        hideKeyboard()
-                        Toast.makeText(mActivity, R.string.message_add_store, Toast.LENGTH_SHORT).show()
-                        mActivity?.onBackPressed()
+
+                if (mStore != null && validateFields(mBinding.tilName, mBinding.tilPhone, mBinding.tilWebsite, mBinding.tilPhoto) ){
+                    with(mStore!!){
+                        name = mBinding.etName.text.toString().trim()
+                        phone = mBinding.etPhone.text.toString().trim()
+                        website = mBinding.etWebsite.text.toString().trim()
+                        date = currentDate
+                        photoUrl = mBinding.etPhotoUrl.text.toString().trim()
+                        createBy = "danny.ezequiel@gmail.com"
+                    }
+                    doAsync {
+                        if(mIsEditMode) {
+                            StoreApplication.database.storeDao().updateStore(mStore!!)
+                        } else {
+                            mStore!!.id = StoreApplication.database.storeDao().addStore(mStore!!)
+                        }
+
+                        uiThread {
+                            hideKeyboard()
+                            if (mIsEditMode){
+                                mActivity?.updateStore(mStore!!)
+                                Snackbar.make(mBinding.root, R.string.message_update_store, Snackbar.LENGTH_SHORT).show()
+                            }else{
+                                mActivity?.addStore(mStore!!)
+                            }
+                            Toast.makeText(mActivity, R.string.message_add_store, Toast.LENGTH_SHORT).show()
+                            mActivity?.onBackPressed()
+                        }
                     }
                 }
                 true
@@ -133,6 +164,48 @@ class EditStoreFragment : Fragment() {
                 super.onOptionsItemSelected(item)
             }
         }
+    }
+
+    private fun validateFields(vararg textFields: TextInputLayout): Boolean{
+        var isValid = true
+
+        for (textField in textFields){
+            if (textField.editText?.text.toString().trim().isEmpty()){
+                textField.error = getString(R.string.helper_required)
+                isValid = false
+            } else textField.error = null
+        }
+        if (!isValid) Snackbar.make(mBinding.root, getString(R.string.edit_store_message_valid), Snackbar.LENGTH_LONG).show()
+        return isValid
+    }
+
+    private fun validateFields() : Boolean {
+        var isValid = true
+
+        if(mBinding.etWebsite.text.toString().isEmpty() || mBinding.etPhone.text.toString().isEmpty() || mBinding.etName.text.toString().isEmpty()){
+            mBinding.tilName.error = getString(R.string.helper_required)
+            mBinding.tilName.requestFocus()
+            isValid = false
+        } else if (mBinding.etPhotoUrl.text.toString().isEmpty()){
+            mBinding.etPhotoUrl.error = getString(R.string.helper_required)
+            mBinding.etPhotoUrl.requestFocus()
+            isValid = false
+        } else if (mBinding.etWebsite.text.toString().isEmpty()){
+            mBinding.tilWebsite.error = getString(R.string.helper_required)
+            mBinding.tilWebsite.requestFocus()
+            isValid = false
+        } else if (mBinding.etPhone.text.toString().isEmpty()){
+            mBinding.tilPhone.error = getString(R.string.helper_required)
+            mBinding.tilPhone.requestFocus()
+            isValid = false
+        } else if (mBinding.etName.text.toString().isEmpty()){
+            mBinding.tilName.error = getString(R.string.helper_required)
+            mBinding.tilName.requestFocus()
+            isValid = false
+        }
+        
+        if (!isValid) Snackbar.make(mBinding.root, getString(R.string.edit_store_message_valid), Snackbar.LENGTH_LONG).show()
+        return isValid
     }
 
 

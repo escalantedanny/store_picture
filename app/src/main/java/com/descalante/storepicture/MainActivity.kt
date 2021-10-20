@@ -1,9 +1,13 @@
 package com.descalante.storepicture
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.UiThread
 import androidx.recyclerview.widget.GridLayoutManager
 import com.descalante.storepicture.adapters.StoreAdapter
@@ -11,6 +15,7 @@ import com.descalante.storepicture.entity.Store
 import com.descalante.storepicture.databinding.ActivityMainBinding
 import com.descalante.storepicture.interfaces.MainAux
 import com.descalante.storepicture.interfaces.OnClickListener
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -82,18 +87,53 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
         doAsync {
             StoreApplication.database.storeDao().updateStore(store)
             uiThread {
-                mAdapter.update(store)
+                updateStore(store)
             }
         }
     }
 
     override fun onDeleteStore(store: Store) {
-        doAsync {
-            StoreApplication.database.storeDao().deleteStore(store)
-            uiThread {
-                mAdapter.delete(store)
-            }
+        val items = arrayOf("Delete", "Call", "Website")
+
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.dialog_options)
+            .setItems(items, DialogInterface.OnClickListener { dialogInterface, i ->
+                when(i){
+                    0 -> {
+                        confirmDelete(store)
+                    } 1 -> {
+                        dial(store.phone)
+                    } else -> {
+                    Toast.makeText(this, "go to the website...", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
+            .show()
+
+
+    }
+
+    private fun dial(phone: String){
+        val callIntent = Intent().apply {
+            action = Intent.ACTION_DIAL
+            data = Uri.parse("tel:$phone")
         }
+        startActivity(callIntent)
+    }
+
+    private fun confirmDelete(store: Store){
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.dialog_delete_title)
+            .setPositiveButton(R.string.button_delete, DialogInterface.OnClickListener { dialogInterface, i ->
+                doAsync {
+                    StoreApplication.database.storeDao().deleteStore(store)
+                    uiThread {
+                        mAdapter.delete(store)
+                    }
+                }
+            })
+            .setNegativeButton(R.string.button_cancel, null)
+            .show()
     }
 
     /**
