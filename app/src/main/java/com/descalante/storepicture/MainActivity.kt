@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
                     } 1 -> {
                         dial(store.phone)
                     } else -> {
-                    Toast.makeText(this, "go to the website...", Toast.LENGTH_SHORT).show()
+                        goToWebsite(store.website)
                     }
                 }
             })
@@ -113,12 +113,34 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
 
     }
 
+    private fun goToWebsite(website: String){
+        if (website.isEmpty()){
+            Toast.makeText(this, "Website is empty", Toast.LENGTH_SHORT).show()
+        } else {
+            val websiteIntent = Intent().apply {
+                action = Intent.ACTION_VIEW
+                data = Uri.parse(website)
+            }
+            if (websiteIntent.resolveActivity(packageManager) != null){
+                startActivity(websiteIntent)
+            } else {
+                Toast.makeText(this, "not found compatibility app", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+    }
+
     private fun dial(phone: String){
         val callIntent = Intent().apply {
             action = Intent.ACTION_DIAL
             data = Uri.parse("tel:$phone")
         }
-        startActivity(callIntent)
+
+        if (callIntent.resolveActivity(packageManager) != null){
+            startActivity(callIntent)
+        } else {
+            Toast.makeText(this, "not found compatibility app", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun confirmDelete(store: Store){
