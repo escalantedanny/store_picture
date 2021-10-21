@@ -1,4 +1,4 @@
-# store_picture
+# Store Picture with save in SQLite
 App para almacenar comercios he imágenes, ademas  guardando en SQLite con la librería Room de google
 Store Picture and Save
 This repository contains the finished sample code for the Architecture Components in kotlin.
