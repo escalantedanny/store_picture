@@ -1,23 +1,34 @@
 <resources>
     <string name="app_name">Stores</string>
+
+    <string name="arg_id">key_id</string>
+
+    <string name="button_delete">Delete</string>
+    <string name="button_cancel">Cancel</string>
+
     <string name="description_image">Picture of store</string>
-    <string name="description_store_add">Crear Tienda</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="description_store_add">Create Store</string>
+    <string name="dialog_delete_title">Do you want delete record?</string>
+    <string name="dialog_options">¿What would you like to do?</string>
+
+    <string name="edit_store_message_valid">please, fields empty</string>
+    <string name="edit_store_title_edit">update store</string>
+    <string name="edit_store_title_add">Create Store</string>
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hint_name">Store Name</string>
     <string name="helper_required">Required</string>
     <string name="hint_phone">Cellphone</string>
-    <string name="website_name">http://www.dominio.com</string>
-    <string name="Url_picture">Url picture</string>
-    <string name="edit_store_title_add">Create Store</string>
+
     <string name="menu_save">Save</string>
-    <string name="message_add_store">store added successfully</string>
-    <string name="arg_id">key_id</string>
+    <string name="message_add_store">Store added successfully</string>
     <string name="message_update_store">update success</string>
-    <string name="edit_store_message_valid">please, fields empty</string>
-    <string name="edit_store_title_edit">update store</string>
-    <string name="dialog_delete_title">Do you want delete record?</string>
-    <string name="button_delete">Delete</string>
-    <string name="button_cancel">Cancel</string>
-    <string name="dialog_options">What do you want?</string>
+
+    <string name="option_call">To call</string>
+    <string name="option_website">Go to website</string>
+
+    <string name="Url_picture">Url picture</string>
+
+    <string name="website_name">http://www.dominio.com</string>
+
 </resources>

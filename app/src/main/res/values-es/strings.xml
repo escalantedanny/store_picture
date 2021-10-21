@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tiendas</string>
+
+    <string name="arg_id">key_id</string>
+
+    <string name="button_delete">Eliminar</string>
+    <string name="button_cancel">Cancelar</string>
+
+    <string name="description_image">Imagen de la Tienda</string>
+    <string name="description_store_add">Crear Tienda</string>
+    <string name="dialog_delete_title">Eliminaras el registro?</string>
+    <string name="dialog_options">Que desea Hacer?</string>
+
+    <string name="edit_store_message_valid">por favor, campos vacios</string>
+    <string name="edit_store_title_edit">Tienda Actualizada</string>
+    <string name="edit_store_title_add">Crear Tienda</string>
+
+    <string name="hello_blank_fragment">Fragment en blanco</string>
+    <string name="hint_name">Nombre de la tienda</string>
+    <string name="helper_required">Requerido</string>
+    <string name="hint_phone">Telefono Celular</string>
+
+    <string name="menu_save">Guardar</string>
+    <string name="message_add_store">Tienda agregada correctamente</string>
+    <string name="message_update_store">Actualizada con Exito</string>
+
+    <string name="option_call">LLamar</string>
+    <string name="option_website">Pagina Web</string>
+
+    <string name="Url_picture">URL de la imagen</string>
+
+    <string name="website_name">http://www.dominio.com</string>
+
+</resources>

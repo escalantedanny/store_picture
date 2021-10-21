@@ -93,7 +93,11 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
     }
 
     override fun onDeleteStore(store: Store) {
-        val items = arrayOf("Delete", "Call", "Website")
+        // normal form
+        //val items = arrayOf("Delete", "Call", "Website")
+
+        // advance form
+        val items = resources.getStringArray(R.array.array_options_item)
 
         MaterialAlertDialogBuilder(this)
             .setTitle(R.string.dialog_options)
@@ -121,12 +125,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
                 action = Intent.ACTION_VIEW
                 data = Uri.parse(website)
             }
-            if (websiteIntent.resolveActivity(packageManager) != null){
-                startActivity(websiteIntent)
-            } else {
-                Toast.makeText(this, "not found compatibility app", Toast.LENGTH_SHORT).show()
-            }
-
+            startIntent(websiteIntent)
         }
     }
 
@@ -135,9 +134,12 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
             action = Intent.ACTION_DIAL
             data = Uri.parse("tel:$phone")
         }
+        startIntent(callIntent)
+    }
 
-        if (callIntent.resolveActivity(packageManager) != null){
-            startActivity(callIntent)
+    private fun startIntent( intentMod: Intent){
+        if (intentMod.resolveActivity(packageManager) != null){
+            startActivity(intentMod)
         } else {
             Toast.makeText(this, "not found compatibility app", Toast.LENGTH_SHORT).show()
         }
