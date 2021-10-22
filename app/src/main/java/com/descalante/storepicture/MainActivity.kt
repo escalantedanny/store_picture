@@ -64,8 +64,9 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
 
     override fun setupRecyclerView() {
         mAdapter = StoreAdapter(mutableListOf(), this)
-        mGridLayout = GridLayoutManager(this, 2)
+        mGridLayout = GridLayoutManager(this, resources.getInteger(R.integer.main_default))
         getStore()
+
         mBinding.recyclerView.apply {
             setHasFixedSize(true) // no cambiara de tamaño y puede optimizar los recursos
             layoutManager = mGridLayout

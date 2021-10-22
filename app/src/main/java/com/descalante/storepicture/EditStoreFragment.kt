@@ -77,17 +77,21 @@ class EditStoreFragment : Fragment() {
     private fun setupTextFields() {
 
         mBinding.etPhotoUrl.addTextChangedListener {
-            Glide.with(this)
-                .load(mBinding.etPhotoUrl.toString())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .centerCrop()
-                .into(mBinding.imgPhoto)
+            loadImage(it.toString().trim())
         }
 
         mBinding.etName.addTextChangedListener{ validateFields(mBinding.tilName) }
         mBinding.etPhone.addTextChangedListener{ validateFields(mBinding.tilPhone) }
         mBinding.etWebsite.addTextChangedListener{ validateFields(mBinding.tilWebsite) }
         mBinding.etPhotoUrl.addTextChangedListener{ validateFields(mBinding.tilPhoto) }
+    }
+    
+    private fun loadImage(url: String){
+        Glide.with(this)
+                .load(url)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerCrop()
+                .into(mBinding.imgPhoto)
     }
 
     private fun getStore(id: Long) {

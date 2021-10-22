@@ -5,4 +5,5 @@
     <integer name="max_line_website">2</integer>
     <integer name="max_lines_photo">4</integer>
     <integer name="counter_max_website">100</integer>
+    <integer name="main_default">2</integer>
 </resources>

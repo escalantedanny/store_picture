@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Stores</string>
 
-    <string name="arg_id">key_id</string>
+    <string name="arg_id" translatable="false">key_id</string>
 
     <string name="button_delete">Delete</string>
     <string name="button_cancel">Cancel</string>
